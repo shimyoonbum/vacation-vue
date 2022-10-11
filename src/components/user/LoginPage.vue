@@ -76,11 +76,10 @@ export default {
       this.$validator.validateAll()
 
       if (this.user.username && this.user.password) {
-        this.$store.dispatch('auth/login', this.user).then(
-          data => {
-            console.log(data);
-            this.$router.push('/')
-          },
+        this.$store.dispatch('auth/login', this.user).then(() => {
+          alert('로그인 성공!')
+          this.$router.push('/')
+        },
           error => {
             this.loading = false
             this.message = error.data
@@ -114,7 +113,6 @@ label {
   background-color: white;
   padding: 20px 25px 30px;
   margin: 0 auto 25px;
-  margin-top: 50px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   border-radius: 2px;
@@ -131,5 +129,11 @@ label {
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
   border-radius: 50%;
+}
+
+.col-md-12 {
+  background-image: url('../../assets/images/main.jpg');
+  padding-top: 100px;
+  padding-bottom: 100px;
 }
 </style>

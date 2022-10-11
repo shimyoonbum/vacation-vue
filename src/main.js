@@ -25,15 +25,22 @@ import {
   faCoffee,
   faPenToSquare,
   faListCheck,
-  faEye
+  faEye,
+  faCalendarDays,
+  faX
 } from '@fortawesome/free-solid-svg-icons'
+import VCalendar from 'v-calendar';
 
 library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faUmbrellaBeach, faPlane, faCalendarCheck, faBuilding,
-faSitemap, faCalendar, faPhone, faEnvelope, faCoffee, faPenToSquare, faListCheck, faEye)
+faSitemap, faCalendar, faPhone, faEnvelope, faCoffee, faPenToSquare, faListCheck, faEye, faCalendarDays, faX)
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
 Vue.use(VeeValidate)
+// Use v-calendar & v-date-picker components
+Vue.use(VCalendar, {
+  componentPrefix: 'vc'  // Use <vc-calendar /> instead of <v-calendar />
+});
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 /* eslint-disable no-new */

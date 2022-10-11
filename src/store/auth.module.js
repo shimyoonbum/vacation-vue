@@ -1,4 +1,5 @@
 import AuthService from '../services/auth-service'
+import NoticeService from '../services/notice-service'
 
 const user = JSON.parse(localStorage.getItem('user'))
 const initialState = user
@@ -28,20 +29,56 @@ export const auth = {
     main({ commit }) {
       return AuthService.main().then(
         data => {
-          commit('main')
+          commit('searchSuccess')
           return Promise.resolve(data)
         },
         error => {
-          commit('main')
-          return Promise.reject(error.response.data)
+          commit('searchFailure')
+          return Promise.reject(error.response)
         }
       )
-    }
+    },
+    notice({ commit }, param) {
+      return NoticeService.notice(param).then(
+        data => {
+          commit('searchSuccess')
+          return Promise.resolve(data)
+        },
+        error => {
+          commit('searchFailure')
+          return Promise.reject(error.response)
+        }
+      )
+    },
+    noticeDetail({ commit }, param) {
+      return NoticeService.noticeDetail(param).then(
+        data => {
+          commit('searchSuccess')
+          return Promise.resolve(data)
+        },
+        error => {
+          commit('searchFailure')
+          return Promise.reject(error.response)
+        }
+      )
+    },
+    noticeSubmit({ commit }, param) {
+      return NoticeService.noticeSubmit(param).then(
+        data => {
+          commit('submitSuccess')
+          return Promise.resolve(data)
+        },
+        error => {
+          commit('submitFailure')
+          return Promise.reject(error.response)
+        }
+      )
+    },
   },
   mutations: {
     loginSuccess(state, user) {
       state.status = { loggedIn: true }
-      state.user = user
+      state.user = user.data.username
     },
     loginFailure(state) {
       state.status = {}
@@ -51,8 +88,18 @@ export const auth = {
       state.status = {}
       state.user = null
     },
-    main(data) {
+    searchSuccess(data) {
       data
+    },
+    searchFailure(state) {      
+      state.status = {}
+      state.user = null
+      localStorage.removeItem('user')
+      localStorage.removeItem('token')
+    },
+    submitSuccess() {      
+    },
+    submitFailure() {      
     }
   }
 }

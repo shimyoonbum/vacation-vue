@@ -2,43 +2,42 @@
   <div class="container">
     <h2>USERINFO</h2>
     <hr>
-    <div class="row-flex" style="display: flex; justify-content: space-between;">
-        <h4><strong>심윤범</strong> 님 환영합니다!</h4>
-        <!-- Via multiple directive modifiers -->
-        <b-button v-b-toggle.collapse-a><font-awesome-icon icon="fa-eye"/> 유저 정보 상세</b-button>
+    <div style="display: flex; justify-content: space-between;">
+        <h4><strong style="color:slateblue">{{empInfo.empName}}</strong> 님 환영합니다!</h4>
+        <b-button v-b-toggle.collapse-a class="detailBtn"><div><font-awesome-icon icon="fa-eye"/></div><p>상세정보</p></b-button>
     </div>
-    <div className="text-center" style="text-align: center;">
+    <div style="text-align: center;">
       <br />        
       <b-collapse id="collapse-a" class="mt-2">
         <b-card>
           <div :class='css3'>
             <div :class='css1'><font-awesome-icon icon="fa-coffee" /></div>
-            <div :class='css2'>사번 :</div>
+            <div :class='css2'>사번 </div>
             <div :class='css4'>{{empInfo.empCode}}</div>
           </div>
           <div :class='css3'>
             <div :class='css1'><font-awesome-icon icon="fa-building" /></div>
-            <div :class='css2'>직위 :</div>
+            <div :class='css2'>직위 </div>
             <div :class='css4'>{{empInfo.empRank}}</div>
           </div>
           <div :class='css3'>
             <div :class='css1'><font-awesome-icon icon="fa-sitemap" /></div>
-            <div :class='css2'>조직 이름 :</div>
+            <div :class='css2'>조직 이름 </div>
             <div :class='css4'>{{empInfo.orgName}}</div>
           </div>
           <div :class='css3'>
             <div :class='css1'><font-awesome-icon icon="fa-user" /></div>
-            <div :class='css2'>조직 구분 :</div>
+            <div :class='css2'>조직 구분 </div>
             <div :class='css4'>{{empInfo.codeName}}</div>
           </div>                                   
           <div :class='css3'>
             <div :class='css1'><font-awesome-icon icon="fa-calendar" /></div>
-            <div :class='css2'>입사일 :</div>
+            <div :class='css2'>입사일 </div>
             <div :class='css4'>{{empInfo.joinDate}}</div>
           </div>
           <div :class='css3'>
             <div :class='css1'><font-awesome-icon icon="fa-phone" /></div>
-            <div :class='css2'>전화번호 :</div>
+            <div :class='css2'>전화번호 </div>
             <div :class='css4'>{{empInfo.phone}}</div>
           </div>
           <!-- <div :class='css3'>
@@ -74,12 +73,22 @@
             </b-card-text>
         </b-card>
     </b-card-group>
+    <div class="row">
+      <MainList :title='title'></MainList>
+      <MainList2 :title='title2'></MainList2>
+    </div>
   </div>
 </template>
 
-<script>
+<script>  
+import MainList from './MainListPage.vue'
+import MainList2 from './MainListPage2.vue'
+
 export default {
   name: 'MainPage',
+  components: {
+    MainList, MainList2
+  },
   data() {
     return {
       empInfo: {},
@@ -88,6 +97,8 @@ export default {
 			css2 : 'css2',
 			css3 : 'css3',
 			css4 : 'css4',
+      title : '공지사항',
+      title2 : '휴가내역'
     }
   },
   computed: {
@@ -105,7 +116,7 @@ export default {
   methods: {
     getMainData() {
       this.$store.dispatch('auth/main').then(
-        data => {          
+        data => {       
           const info = data.employee
 
           const newInfo = {
@@ -114,11 +125,16 @@ export default {
             codeName : data.employee.organization.code.codeName
           }
           this.empInfo = newInfo          
-          this.vacInfo = data.employee.vacation
-          
+          this.vacInfo = data.employee.vacation          
         },
+        // eslint-disable-next-line
         error => {
-          console.log(error.data);
+          if(error.status === 401){
+            alert('로그인이 필요합니다!')
+            this.$router.push('/login')
+          }else{
+            alert('시스템 오류입니다!')
+          }   
         }
       )
     }
@@ -143,8 +159,14 @@ a {
   color: #42b983;
 }
 
+p{
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 .container{
   margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .css1 {
@@ -154,6 +176,7 @@ a {
   padding-left: 10px;
   text-align: left; 
   width: 100px;
+  font-family: 'DollarLight', sans-serif !important;
 }
 .css3 {
   display: flex;
@@ -161,6 +184,15 @@ a {
 .css4 {
   padding-left: 10px;
   text-align: left; 
-  width: 300px;
+  width: 200px;
+  word-break:break-all;
 }
+
+@media (max-width: 410px) {
+  .detailBtn{
+    font-size: 12px;
+    margin-left: 10px;
+  }
+}
+
 </style>
